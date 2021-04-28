@@ -9,43 +9,19 @@ En caso de no recibirse un array, se devolverá este mensaje de error:
  Si el callback no proporciona un tiempo válido, se devolverá 
  'Tiempo de entrada no válido' 
 */
-function array(){
- var mergedObj = Object.assign({}, object1, object2)
- 
-  return mergedObj
-  //return [{a:"obj1"},{b:"bj2"},{c:"obj3"}]
-} 
-
-const tiempo = () => {
-   
-   let millis = setTimeout(()=>{},2000)
-   segundos = Math.floor(millis / 10000)
-    return segundos
-};
-//var mergedObj = Object.assign({}, object1, object2)
 
 function objectMerge(array, tiempo) {
   return new Promise((resolve, reject) => {
-    if(tiempo > 0  ){
-      if(array.isArray()){
-       tiempo()
-       resolve(array)
-      }
-      else {
-         let error = 'Array de entrada no válido'
-         reject(error)
-      }
+    let objArray = array()
+    if(!Array.isArray(objArray)) reject('Array de entrada no válido')
+    if(!((typeof tiempo()) == 'number')) reject('Tiempo de entrada no válido') 
+    objS = {}
+    for(let obj of objArray) {
+      objS = {...objS, ...obj}
     }
-    else{
-       let error = 'Tiempo de entrada no válido'
-      reject(error)
-    }
+    setTimeout(() => resolve(objS), tiempo() * 1000 )
   })
-}
-let mergedObj
-objectMerge(array, tiempo)
-.then(() => ( mergedObj = Object.assign({ ...object1, ...object2})))
-.catch()                       
+}            
 
 
 //var mergedObj = Object.assign({}, object1, object2)
@@ -80,16 +56,17 @@ si la invocas de nuevo con 5, deberia retornar 25 (guardado previament en el cac
 Nota: usá un objeto donde cada propiedad sea un argumento, y el valor el resultado.
       usá hasOwnProperty!
 */
-function cb(x){
- return x * x
-}
-let obj ={}
 
 function cacheFunction(cb) {
+  var object = {}
   return function(x){
-    obj.hasOwnProperty(x)
-      return cb(x)  
-    
+   if (object.hasOwnProperty(x)){
+    return object[x] 
+   }
+   else{
+    object[x] = cb(x)
+    return object[x]
+   }  
   }
 }
 
